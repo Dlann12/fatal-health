@@ -173,14 +173,14 @@ Metrik yang digunakan untuk mengevaluasi model adalah:
 1. **Learning Curve**:
    Berikut adalah learning curve yang menunjukkan akurasi model pada data training dan validation selama proses training:
 
-   ![image](https://github.com/user-attachments/assets/1720d86d-a647-41b6-ad00-f015176aadca)
-
-2. **Confusion Matrix**:
+   ![Training Accuracy and Loss](3c57a6b8-cddb-48d9-9d28-d9e91e525bf9.png)
+   
+3. **Confusion Matrix**:
    Berikut adalah confusion matrix dari hasil prediksi model pada data test:
 
    ![image](https://github.com/user-attachments/assets/01638445-4e60-4ea4-953e-7d449dd39def)
 
-3. **Classification Report**:
+4. **Classification Report**:
    Berikut adalah classification report yang menunjukkan metrik evaluasi per kelas:
    ```
    precision    recall   f1-score   support
