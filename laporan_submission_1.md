@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/f7d02367-7831-4816-9aa7-68266cf7ffff)# Laporan Proyek Machine Learning - Fadlan Dwi Febrio
+# Laporan Proyek Machine Learning - Fadlan Dwi Febrio
 
 ## Domain Proyek: Kesehatan
 
