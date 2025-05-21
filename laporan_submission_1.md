@@ -1,4 +1,4 @@
-# Laporan Proyek Machine Learning - Fadlan Dwi Febrio
+![image](https://github.com/user-attachments/assets/f7d02367-7831-4816-9aa7-68266cf7ffff)# Laporan Proyek Machine Learning - Fadlan Dwi Febrio
 
 ## Domain Proyek: Kesehatan
 
@@ -173,24 +173,24 @@ Metrik yang digunakan untuk mengevaluasi model adalah:
 1. **Learning Curve**:
    Berikut adalah learning curve yang menunjukkan akurasi model pada data training dan validation selama proses training:
 
-   ![Learning Curve](https://via.placeholder.com/600x300?text=Learning+Curve)
+   ![image](https://github.com/user-attachments/assets/1720d86d-a647-41b6-ad00-f015176aadca)
 
 2. **Confusion Matrix**:
    Berikut adalah confusion matrix dari hasil prediksi model pada data test:
 
-   ![Confusion Matrix](https://via.placeholder.com/600x300?text=Confusion+Matrix)
+   ![image](https://github.com/user-attachments/assets/01638445-4e60-4ea4-953e-7d449dd39def)
 
 3. **Classification Report**:
    Berikut adalah classification report yang menunjukkan metrik evaluasi per kelas:
    ```
    precision    recall   f1-score   support
-   0 (Normal)        0.93      0.98      0.95       332
-   1 (Suspect)       0.76      0.58      0.65        59
-   2 (Pathological)  0.81      0.74      0.78        35
+   0 (Normal)        0.95      0.97      0.96       332
+   1 (Suspect)       0.77      0.69      0.73        59
+   2 (Pathological)  0.82      0.80      0.81        35
 
-   accuracy                               0.90       426
-   macro avg          0.83      0.77      0.79       426
-   weighted avg       0.89      0.90      0.90       426
+   accuracy                               0.92       426
+   macro avg          0.85      0.82      0.83       426
+   weighted avg       0.91      0.92      0.91       426
    ```
 
 ---
