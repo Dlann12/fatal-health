@@ -78,7 +78,8 @@ Berikut adalah beberapa variabel penting dalam dataset:
 2. **Heatmap Korelasi Antar Fitur**:
    Berikut adalah heatmap korelasi antar fitur dalam dataset:
 
-   ![Heatmap Korelasi](https://via.placeholder.com/600x300?text=Heatmap+Korelasi)
+   ![image](https://github.com/user-attachments/assets/91becbac-d0f8-441f-8479-5f9338546b6f)
+
 
    Beberapa fitur menunjukkan korelasi tinggi, seperti `baseline value` dan `histogram_mean`. Hal ini dapat memengaruhi performa model.
 
