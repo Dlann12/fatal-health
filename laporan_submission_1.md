@@ -70,7 +70,8 @@ Berikut adalah beberapa variabel penting dalam dataset:
 1. **Distribusi Kelas Target**:
    Berikut adalah distribusi kelas target dalam dataset:
 
-   ![Distribusi Kelas](https://via.placeholder.com/600x300?text=Distribusi+Kelas+Fetal+Health)
+   ![image](https://github.com/user-attachments/assets/ea4e80bc-697a-4dae-8e1a-ee7f6594f597)
+
 
    Dari visualisasi ini, terlihat bahwa kelas `1` (Normal) memiliki jumlah sampel yang jauh lebih banyak dibandingkan kelas `2` (Suspect) dan `3` (Pathological). Ketidakseimbangan kelas ini dapat memengaruhi performa model, terutama pada recall kelas minoritas.
 
@@ -173,7 +174,8 @@ Metrik yang digunakan untuk mengevaluasi model adalah:
 1. **Learning Curve**:
    Berikut adalah learning curve yang menunjukkan akurasi model pada data training dan validation selama proses training:
 
-   ![Training Accuracy and Loss](3c57a6b8-cddb-48d9-9d28-d9e91e525bf9.png)
+   ![image](https://github.com/user-attachments/assets/73f2f9b2-2dc7-4b58-9940-2054fe470831)
+
    
 3. **Confusion Matrix**:
    Berikut adalah confusion matrix dari hasil prediksi model pada data test:
