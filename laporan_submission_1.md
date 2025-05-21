@@ -187,13 +187,13 @@ Metrik yang digunakan untuk mengevaluasi model adalah:
    Berikut adalah classification report yang menunjukkan metrik evaluasi per kelas:
    ```
    precision    recall   f1-score   support
-   0 (Normal)        0.95      0.97      0.96       332
-   1 (Suspect)       0.77      0.69      0.73        59
-   2 (Pathological)  0.82      0.80      0.81        35
+   0 (Normal)        0.93      0.98      0.96       332
+   1 (Suspect)       0.81      0.59      0.69        59
+   2 (Pathological)  0.83      0.71      0.77        35
 
-   accuracy                               0.92       426
-   macro avg          0.85      0.82      0.83       426
-   weighted avg       0.91      0.92      0.91       426
+   accuracy                               0.91       426
+   macro avg          0.86      0.76      0.80       426
+   weighted avg       0.90      0.91      0.90       426
    ```
 
 ---
