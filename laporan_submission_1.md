@@ -160,6 +160,21 @@ history = model.fit(X_train_scaled, y_train_encoded, epochs=50, batch_size=32, v
 ```
 
 ---
+Untuk meningkatkan performa model, dilakukan eksplorasi terhadap beberapa parameter penting dalam arsitektur Neural Network, seperti jumlah unit pada hidden layer dan tingkat dropout. Selain itu, beberapa konfigurasi seperti batch_size dan jumlah epoch juga diuji secara manual untuk memperoleh performa optimal.
+
+Konfigurasi terbaik yang ditemukan adalah:
+
+Hidden layers: 64 dan 32 unit dengan ReLU
+
+Dropout: 0.3 dan 0.2
+
+Optimizer: Adam (default learning rate)
+
+Epoch: 50
+
+Batch size: 32
+
+Metrik evaluasi pada konfigurasi ini memberikan akurasi test sebesar 91%, dengan F1-score kelas minoritas cukup baik. Model ini dipilih sebagai hasil dari proses tuning manual yang menunjukkan hasil paling konsisten.
 
 ## Evaluation
 
