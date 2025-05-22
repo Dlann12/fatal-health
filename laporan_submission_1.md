@@ -13,6 +13,8 @@ Pemanfaatan machine learning dalam analisis CTG dapat membantu tenaga medis untu
 2. Memberikan hasil yang lebih cepat dan akurat.
 3. Mengurangi beban kerja tenaga medis, terutama di daerah dengan keterbatasan ahli.
 
+Menurut Ayres-de-Campos et al. (2015), keterlambatan dalam mendeteksi kondisi patologis janin dapat meningkatkan risiko kematian bayi baru lahir dan morbiditas ibu. Oleh karena itu, solusi otomatis yang cepat dan akurat sangat dibutuhkan, khususnya di daerah dengan keterbatasan sumber daya medis.
+
 Dengan demikian, proyek ini bertujuan untuk mengembangkan model machine learning yang dapat mengklasifikasikan kondisi kesehatan janin berdasarkan data CTG.
 
 ---
