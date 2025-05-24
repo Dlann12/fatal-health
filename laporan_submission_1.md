@@ -225,9 +225,6 @@ Tahapan untuk mempersiapkan data agar siap digunakan dalam model machine learnin
 X = df.drop("fetal_health", axis=1)
 y = df["fetal_health"]
 
-print("Features shape:", X.shape)
-print("Target shape:", y.shape)
-print("Target distribution:\n", y.value_counts())
 ```
 
 Dataset dipisahkan menjadi dua komponen utama: fitur (X) dan label (y). Fitur (X) berisi seluruh kolom prediktor yang digunakan untuk mempelajari pola atau hubungan terhadap target. Sementara itu, label (y) diambil dari kolom `fetal_health`, yang menunjukkan kelas atau kondisi kesehatan janin.
@@ -242,10 +239,6 @@ X_train, X_test, y_train, y_test = train_test_split(
     X_scaled, y_encoded, test_size=0.2, random_state=42, stratify=y
 )
 
-print("Training set shape:", X_train.shape)
-print("Testing set shape:", X_test.shape)
-print("Training target shape:", y_train.shape)
-print("Testing target shape:", y_test.shape)
 ```
 
 Pembagian dataset dilakukan dengan rasio 80:20 (80% untuk training, 20% untuk testing). Parameter `stratify=y` digunakan agar proporsi masing-masing kelas tetap terjaga secara seimbang pada kedua subset data. Parameter `random_state=42` memastikan pembagian yang konsisten dan dapat direproduksi.
@@ -259,8 +252,6 @@ Menerapkan transformasi yang diperlukan pada data untuk mempersiapkannya untuk m
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 
-print("Original feature shape:", X.shape)
-print("Scaled feature shape:", X_scaled.shape)
 ```
 
 Normalisasi dilakukan menggunakan StandardScaler untuk menyetarakan skala setiap fitur numerik agar memiliki rata-rata 0 dan standar deviasi 1. Hal ini penting karena fitur yang memiliki skala berbeda dapat mendominasi proses pelatihan dan menyebabkan model belajar secara tidak seimbang.
@@ -270,45 +261,9 @@ Normalisasi dilakukan menggunakan StandardScaler untuk menyetarakan skala setiap
 # One-hot encode label (untuk klasifikasi multi-kelas)
 y_encoded = to_categorical(y - 1)  # karena label mulai dari 1, dikurangi
 
-print("Original target shape:", y.shape)
-print("Encoded target shape:", y_encoded.shape)
-print("Number of classes:", y_encoded.shape[1])
 ```
 
 Karena masalah klasifikasi bersifat multi-kelas, label target perlu diubah ke dalam format one-hot encoding. Label awal pada kolom `fetal_health` memiliki nilai 1, 2, dan 3, sehingga dikurangi 1 agar indeks dimulai dari 0. Fungsi `to_categorical` mengubah label integer menjadi vektor biner berdimensi tiga.
-
-## 7. Final Data Validation
-Memastikan data telah siap untuk tahap modeling dengan melakukan validasi akhir.
-
-### Data Shape Validation
-```python
-# Validasi bentuk data final
-print("=== FINAL DATA SHAPES ===")
-print(f"X_train: {X_train.shape}")
-print(f"X_test: {X_test.shape}")
-print(f"y_train: {y_train.shape}")
-print(f"y_test: {y_test.shape}")
-```
-
-### Data Quality Check
-```python
-# Cek apakah ada nilai NaN setelah preprocessing
-print("=== DATA QUALITY CHECK ===")
-print(f"X_train contains NaN: {np.isnan(X_train).any()}")
-print(f"X_test contains NaN: {np.isnan(X_test).any()}")
-print(f"y_train contains NaN: {np.isnan(y_train).any()}")
-print(f"y_test contains NaN: {np.isnan(y_test).any()}")
-```
-
-### Data Distribution Verification
-```python
-# Verifikasi distribusi kelas setelah splitting
-print("=== CLASS DISTRIBUTION ===")
-print("Training set class distribution:")
-print(np.argmax(y_train, axis=1))
-print("Testing set class distribution:")
-print(np.argmax(y_test, axis=1))
-```
 
 ## Summary
 Data preparation telah selesai dilakukan dengan tahapan sebagai berikut:
