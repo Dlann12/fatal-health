@@ -25,12 +25,13 @@ Dengan demikian, proyek ini bertujuan untuk mengembangkan model machine learning
 
 1. Bagaimana cara mengklasifikasikan kondisi kesehatan janin (normal, suspect, patologis) berdasarkan data CTG menggunakan machine learning?
 2. Apakah model yang dibangun dapat memberikan hasil yang akurat dan dapat diandalkan untuk digunakan sebagai alat bantu tenaga medis?
+3. Bagaimana memastikan model dapat diimplementasikan secara praktis dan mudah dipakai oleh tenaga medis di lapangan?
 
 ### Goals
 
-1. Membangun model machine learning untuk klasifikasi kesehatan janin berdasarkan data CTG.
-2. Mengukur performa model menggunakan metrik evaluasi seperti akurasi, precision, recall, dan F1-score.
-3. Memastikan model dapat diimplementasikan dalam skenario nyata untuk mendukung pengambilan keputusan medis.
+1. Membangun model machine learning yang efektif untuk klasifikasi kondisi kesehatan janin berdasarkan data CTG.
+2. Mengevaluasi performa model menggunakan metrik seperti akurasi, precision, recall, dan F1-score agar hasilnya akurat dan dapat dipercaya.
+3. Mendesain dan mengembangkan model agar mudah diintegrasikan dan digunakan dalam skenario klinis nyata oleh tenaga medis.
 
 ### Solution Statements
 
@@ -44,28 +45,92 @@ Untuk mencapai tujuan tersebut, langkah-langkah berikut akan dilakukan:
 
 ## Data Understanding
 
-### Informasi Dataset
+# Dataset Overview
 
-Dataset yang digunakan adalah **Fetal Health Classification Dataset**, yang berisi data hasil pemeriksaan CTG. Dataset ini dapat diunduh dari [Kaggle](https://www.kaggle.com/datasets/andrewmvd/fetal-health-classification).
+**Sumber Dataset:** Kaggle - Fetal Health Classification
 
-**Dataset Overview**:
-- **Jumlah data**: 2,126 sampel
-- **Jumlah fitur**: 21 fitur numerik
-- **Label target**: `fetal_health` dengan 3 kelas (1=Normal, 2=Suspect, 3=Pathological)
+- **Jumlah Sampel:** 2.126  
+- **Jumlah Fitur:** 22 fitur numerik  
+- **Target:** fetal_health (3 kelas: 1=Normal, 2=Suspect, 3=Pathological)  
+- **Missing Values:** 0 (Tidak ada data hilang)  
+- **Duplikat:** 13 entri terdeteksi  
+- **Tipe Data:** Semua kolom bertipe `float64`  
 
-### Variabel-Variabel dalam Dataset
+---
 
-Berikut adalah beberapa variabel penting dalam dataset:
-- `baseline value`: Detak jantung dasar janin (bpm).
-- `accelerations`: Jumlah akselerasi detak jantung janin per detik.
-- `fetal_movement`: Gerakan janin per detik.
-- `uterine_contractions`: Kontraksi rahim per detik.
-- `light_decelerations`: Deselerasi ringan per detik.
-- `severe_decelerations`: Deselerasi berat per detik.
-- `abnormal_short_term_variability`: Variasi jangka pendek abnormal (ms).
-- `mean_value_of_short_term_variability`: Nilai rata-rata variasi jangka pendek (ms).
-- `histogram_mode`: Modus histogram.
-- `fetal_health`: Label target (1=Normal, 2=Suspect, 3=Pathological).
+## Deskripsi Lengkap Variabel
+
+### Parameter Detak Jantung Janin
+- **baseline_value:** Detak jantung dasar janin (bpm).  
+- **accelerations:** Jumlah akselerasi detak jantung per detik.  
+- **fetal_movement:** Gerakan janin per detik.  
+- **uterine_contractions:** Frekuensi kontraksi rahim per detik.  
+- **light_decelerations:** Deselerasi ringan detak jantung per detik.  
+- **severe_decelerations:** Deselerasi berat detak jantung per detik.  
+- **prolongued_decelerations:** Deselerasi berkepanjangan detak jantung per detik.  
+
+### Variabilitas Jangka Pendek
+- **abnormal_short_term_variability:** Persentase variasi abnormal jangka pendek.  
+- **mean_value_of_short_term_variability:** Rata-rata variasi jangka pendek (ms).  
+
+### Variabilitas Jangka Panjang
+- **percentage_of_time_with_abnormal_long_term_variability:** Persentase waktu dengan variasi abnormal jangka panjang.  
+- **mean_value_of_long_term_variability:** Rata-rata variasi jangka panjang (ms).  
+
+### Histogram CTG
+- **histogram_width:** Rentang nilai histogram.  
+- **histogram_min:** Nilai minimum histogram.  
+- **histogram_max:** Nilai maksimum histogram.  
+- **histogram_number_of_peaks:** Jumlah puncak histogram.  
+- **histogram_number_of_zeroes:** Jumlah nilai nol pada histogram.  
+- **histogram_mode:** Modus histogram.  
+- **histogram_mean:** Rata-rata histogram.  
+- **histogram_median:** Median histogram.  
+- **histogram_variance:** Variansi histogram.  
+- **histogram_tendency:** Kecenderungan histogram (-1=menurun, 0=stabil, 1=naik).  
+
+### Target
+- **fetal_health:** Label klasifikasi kesehatan janin (1=Normal, 2=Suspect, 3=Pathological).  
+
+---
+
+## Analisis Data Eksplorasi (EDA)
+
+1. **Statistik Deskriptif**  
+   - Detak jantung dasar janin: Rata-rata 133.3 bpm (rentang 106–160 bpm).  
+   - Akselerasi: Rata-rata 0.003/detik (maks 0.019/detik).  
+   - Deselerasi berat: 75% data bernilai 0.0, ada outlier hingga 0.001/detik.  
+   - Variabilitas jangka pendek abnormal: Rata-rata 46.99% (rentang 12–87%).  
+
+2. **Keseimbangan Kelas**  
+   - Kelas 1 (Normal): 1.655 sampel (77.8%).  
+   - Kelas 2 (Suspect): 295 sampel (13.9%).  
+   - Kelas 3 (Pathological): 176 sampel (8.3%).  
+   _Kelas tidak seimbang, yang berpotensi memengaruhi performa model._  
+
+3. **Korelasi Antar Fitur**  
+   - Fitur dengan korelasi tertinggi terhadap target:  
+     - `abnormal_short_term_variability` (+0.48)  
+     - `prolongued_decelerations` (+0.39)  
+     - `baseline_value` berkorelasi negatif (-0.21)  
+
+4. **Missing Values dan Duplikat**  
+   - Tidak ada missing values.  
+   - 13 data duplikat terdeteksi, perlu evaluasi apakah akan dipertahankan atau dihapus.  
+
+5. **Outlier**  
+   - Beberapa fitur seperti `severe_decelerations` dan `histogram_variance` menunjukkan outlier ekstrem (contoh: histogram_variance maks 269, 75% data ≤24).  
+
+---
+
+## Rekomendasi untuk Pemodelan
+
+- **Penanganan Ketidakseimbangan Kelas:** Gunakan teknik oversampling (misal SMOTE) atau pemberian bobot kelas.  
+- **Reduksi Dimensi:** Terapkan PCA atau seleksi fitur berdasarkan korelasi untuk mengurangi kompleksitas.  
+- **Normalisasi:** Skalakan fitur karena rentang nilai bervariasi (contoh: accelerations vs histogram_variance).  
+- **Penanganan Outlier:** Pertimbangkan transformasi log atau penghapusan outlier ekstrem.  
+
+---
 
 ### Exploratory Data Analysis (EDA)
 
@@ -89,44 +154,196 @@ Berikut adalah beberapa variabel penting dalam dataset:
 
 ## Data Preparation
 
-Berikut adalah langkah-langkah yang dilakukan untuk mempersiapkan data:
+## Overview
+Dalam konteks **Data Preparation**, tahapan ini tidak hanya menunjukkan jumlah tindakan yang dilakukan, tetapi juga merepresentasikan urutan dari proses persiapan data yang kami lakukan di dalam notebook. Oleh karena itu, urutan penulisan dalam laporan harus konsisten dengan urutan aktual di notebook agar memudahkan pembaca memahami alur logis transformasi data serta memastikan kejelasan dan akurasi dokumentasi proses.
 
-1. **Membaca Data**:
-   ```python
-   df = pd.read_csv("fetal_health.csv")
-   ```
+## 1. Import Libraries dan Load Data
+Pada bagian awal kode ini, beberapa pustaka penting diimpor untuk mendukung proses pemodelan dan analisis data. Library Pandas (pd) dan NumPy (np) digunakan sebagai fondasi utama untuk manipulasi data dan operasi numerik. Selanjutnya, dari library scikit-learn, digunakan modul train_test_split untuk membagi data ke dalam subset pelatihan dan pengujian secara acak, serta StandardScaler untuk melakukan normalisasi terhadap fitur numerik agar memiliki distribusi standar (mean = 0 dan standar deviasi = 1).
 
-2. **Mengecek Missing Value**:
-   Tidak ditemukan missing value dalam dataset.
+### Import Libraries
+```python
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.utils import to_categorical
+from sklearn.metrics import classification_report, confusion_matrix
+```
 
-3. **Membagi Fitur dan Target**:
-   ```python
-   X = df.drop('fetal_health', axis=1)
-   y = df['fetal_health']
-   ```
+### Load Dataset
+```python
+# Meload Dataset yang akan digunakan dan diambil dari kaggle
+df = pd.read_csv("fetal_health.csv")
+```
 
-4. **Membagi Data Train-Test**:
-   ```python
-   from sklearn.model_selection import train_test_split
-   X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
-   ```
+## 2. Data Understanding dan Quality Check
+Sebelum melakukan preprocessing, penting untuk memahami struktur dan karakteristik data melalui eksplorasi dasar.
 
-5. **Standarisasi Data**:
-   ```python
-   from sklearn.preprocessing import StandardScaler
-   scaler = StandardScaler()
-   X_train_scaled = scaler.fit_transform(X_train)
-   X_test_scaled = scaler.transform(X_test)
-   ```
+### Basic Information
+```python
+# Menampilkan 5 baris awal dataset
+df.head()
 
-6. **One-Hot Encoding untuk Target**:
-   ```python
-   from tensorflow.keras.utils import to_categorical
-   y_train_encoded = to_categorical(y_train - 1)
-   y_test_encoded = to_categorical(y_test - 1)
-   ```
+# Informasi dataset seperti tipe data nama kolom dan lain lain
+df.info()
 
----
+# Mendeskripsikan kolom-kolom pada data, dan menghitung count, mean dan lain lain
+df.describe()
+```
+
+### Data Quality Assessment
+```python
+# Menghitung jumlah data null yang ada pada dataset
+df.isnull().sum()
+
+# Menghitung data duplikat pada dataset
+df.duplicated().sum()
+```
+
+## 3. Data Cleaning dan Quality Check
+Pada tahapan ini, fokus utama adalah **melakukan pra-pemrosesan data** berdasarkan temuan dari tahap Data Understanding. Berdasarkan hasil eksplorasi, dataset fetal health sudah dalam kondisi bersih tanpa missing values atau duplikat, sehingga tidak diperlukan langkah pembersihan data tambahan.
+
+### Data Quality Validation
+```python
+# Validasi tidak ada missing values
+print("Missing Values:", df.isnull().sum().sum())
+
+# Validasi tidak ada duplikat
+print("Duplicate Records:", df.duplicated().sum())
+```
+
+*Hasil: Dataset sudah bersih dan siap untuk tahap preprocessing selanjutnya.*
+
+## 4. Pre-Processing: Feature dan Target Preparation
+Tahapan untuk mempersiapkan data agar siap digunakan dalam model machine learning.
+
+### Pemisahan Fitur dan Target
+```python
+# Pisahkan fitur dan label
+X = df.drop("fetal_health", axis=1)
+y = df["fetal_health"]
+
+print("Features shape:", X.shape)
+print("Target shape:", y.shape)
+print("Target distribution:\n", y.value_counts())
+```
+
+Dataset dipisahkan menjadi dua komponen utama: fitur (X) dan label (y). Fitur (X) berisi seluruh kolom prediktor yang digunakan untuk mempelajari pola atau hubungan terhadap target. Sementara itu, label (y) diambil dari kolom `fetal_health`, yang menunjukkan kelas atau kondisi kesehatan janin.
+
+## 6. Data Splitting
+Membagi dataset menjadi training dan testing set untuk evaluasi model.
+
+### Train-Test Split dengan Stratified Sampling
+```python
+# Split dataset
+X_train, X_test, y_train, y_test = train_test_split(
+    X_scaled, y_encoded, test_size=0.2, random_state=42, stratify=y
+)
+
+print("Training set shape:", X_train.shape)
+print("Testing set shape:", X_test.shape)
+print("Training target shape:", y_train.shape)
+print("Testing target shape:", y_test.shape)
+```
+
+Pembagian dataset dilakukan dengan rasio 80:20 (80% untuk training, 20% untuk testing). Parameter `stratify=y` digunakan agar proporsi masing-masing kelas tetap terjaga secara seimbang pada kedua subset data. Parameter `random_state=42` memastikan pembagian yang konsisten dan dapat direproduksi.
+
+## 5. Data Transformation
+Menerapkan transformasi yang diperlukan pada data untuk mempersiapkannya untuk modeling.
+
+### Feature Scaling dengan StandardScaler
+```python
+# Normalisasi fitur
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+print("Original feature shape:", X.shape)
+print("Scaled feature shape:", X_scaled.shape)
+```
+
+Normalisasi dilakukan menggunakan StandardScaler untuk menyetarakan skala setiap fitur numerik agar memiliki rata-rata 0 dan standar deviasi 1. Hal ini penting karena fitur yang memiliki skala berbeda dapat mendominasi proses pelatihan dan menyebabkan model belajar secara tidak seimbang.
+
+### Target Encoding untuk Neural Network
+```python
+# One-hot encode label (untuk klasifikasi multi-kelas)
+y_encoded = to_categorical(y - 1)  # karena label mulai dari 1, dikurangi
+
+print("Original target shape:", y.shape)
+print("Encoded target shape:", y_encoded.shape)
+print("Number of classes:", y_encoded.shape[1])
+```
+
+Karena masalah klasifikasi bersifat multi-kelas, label target perlu diubah ke dalam format one-hot encoding. Label awal pada kolom `fetal_health` memiliki nilai 1, 2, dan 3, sehingga dikurangi 1 agar indeks dimulai dari 0. Fungsi `to_categorical` mengubah label integer menjadi vektor biner berdimensi tiga.
+
+## 7. Final Data Validation
+Memastikan data telah siap untuk tahap modeling dengan melakukan validasi akhir.
+
+### Data Shape Validation
+```python
+# Validasi bentuk data final
+print("=== FINAL DATA SHAPES ===")
+print(f"X_train: {X_train.shape}")
+print(f"X_test: {X_test.shape}")
+print(f"y_train: {y_train.shape}")
+print(f"y_test: {y_test.shape}")
+```
+
+### Data Quality Check
+```python
+# Cek apakah ada nilai NaN setelah preprocessing
+print("=== DATA QUALITY CHECK ===")
+print(f"X_train contains NaN: {np.isnan(X_train).any()}")
+print(f"X_test contains NaN: {np.isnan(X_test).any()}")
+print(f"y_train contains NaN: {np.isnan(y_train).any()}")
+print(f"y_test contains NaN: {np.isnan(y_test).any()}")
+```
+
+### Data Distribution Verification
+```python
+# Verifikasi distribusi kelas setelah splitting
+print("=== CLASS DISTRIBUTION ===")
+print("Training set class distribution:")
+print(np.argmax(y_train, axis=1))
+print("Testing set class distribution:")
+print(np.argmax(y_test, axis=1))
+```
+
+## Summary
+Data preparation telah selesai dilakukan dengan tahapan sebagai berikut:
+
+1. **Data Loading dan Import Libraries**: Dataset fetal health berhasil dimuat bersama dengan semua library yang diperlukan untuk deep learning (Keras/TensorFlow) dan preprocessing (scikit-learn)
+
+2. **Data Understanding**: Eksplorasi dasar menunjukkan dataset dalam kondisi bersih tanpa missing values atau duplikat, siap untuk preprocessing
+
+3. **Data Cleaning**: Tidak diperlukan pembersihan khusus karena data sudah berkualitas baik
+
+4. **Feature-Target Separation**: 
+   - **Features (X)**: Semua kolom kecuali `fetal_health` 
+   - **Target (y)**: Kolom `fetal_health` dengan 3 kelas (1, 2, 3)
+
+5. **Data Transformation**: 
+   - **Feature Scaling**: StandardScaler diterapkan untuk normalisasi semua fitur numerik
+   - **Target Encoding**: One-hot encoding untuk target menjadi format yang sesuai dengan neural network
+
+6. **Data Splitting**: Pembagian data menjadi training (80%) dan testing (20%) dengan stratified sampling untuk menjaga proporsi kelas
+
+7. **Final Validation**: Verifikasi bentuk data, kualitas, dan distribusi kelas
+
+**Data Final yang Siap untuk Modeling:**
+- **Training Data**: `X_train` (fitur scaled), `y_train` (one-hot encoded)
+- **Testing Data**: `X_test` (fitur scaled), `y_test` (one-hot encoded)  
+- **Scaler Object**: Tersimpan untuk transformasi data baru di masa mendatang
+- **Classes**: 3 kelas untuk klasifikasi kesehatan janin (Normal, Suspect, Pathological)
+
+**Key Points:**
+- Semua fitur telah dinormalisasi dengan mean=0 dan std=1
+- Target telah dikonversi ke format one-hot encoding untuk neural network
+- Stratified sampling memastikan distribusi kelas yang seimbang
+- Data siap untuk tahap modeling menggunakan deep learning dengan Keras/TensorFlow
+
+Pastikan untuk menyimpan objek scaler untuk digunakan pada data produksi atau prediksi baru di masa mendatang.
 
 ## Modeling
 
