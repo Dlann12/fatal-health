@@ -202,21 +202,9 @@ df.isnull().sum()
 df.duplicated().sum()
 ```
 
-## 3. Data Cleaning dan Quality Check
-Pada tahapan ini, fokus utama adalah **melakukan pra-pemrosesan data** berdasarkan temuan dari tahap Data Understanding. Berdasarkan hasil eksplorasi, dataset fetal health sudah dalam kondisi bersih tanpa missing values atau duplikat, sehingga tidak diperlukan langkah pembersihan data tambahan.
-
-### Data Quality Validation
-```python
-# Validasi tidak ada missing values
-print("Missing Values:", df.isnull().sum().sum())
-
-# Validasi tidak ada duplikat
-print("Duplicate Records:", df.duplicated().sum())
-```
-
 *Hasil: Dataset sudah bersih dan siap untuk tahap preprocessing selanjutnya.*
 
-## 4. Pre-Processing: Feature dan Target Preparation
+## 3. Pre-Processing: Feature dan Target Preparation
 Tahapan untuk mempersiapkan data agar siap digunakan dalam model machine learning.
 
 ### Pemisahan Fitur dan Target
@@ -228,6 +216,28 @@ y = df["fetal_health"]
 ```
 
 Dataset dipisahkan menjadi dua komponen utama: fitur (X) dan label (y). Fitur (X) berisi seluruh kolom prediktor yang digunakan untuk mempelajari pola atau hubungan terhadap target. Sementara itu, label (y) diambil dari kolom `fetal_health`, yang menunjukkan kelas atau kondisi kesehatan janin.
+
+## 4. Data Transformation
+Menerapkan transformasi yang diperlukan pada data untuk mempersiapkannya untuk modeling.
+
+### Feature Scaling dengan StandardScaler
+```python
+# Normalisasi fitur
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+```
+
+Normalisasi dilakukan menggunakan StandardScaler untuk menyetarakan skala setiap fitur numerik agar memiliki rata-rata 0 dan standar deviasi 1. Hal ini penting karena fitur yang memiliki skala berbeda dapat mendominasi proses pelatihan dan menyebabkan model belajar secara tidak seimbang.
+
+### 5.Target Encoding untuk Neural Network
+```python
+# One-hot encode label (untuk klasifikasi multi-kelas)
+y_encoded = to_categorical(y - 1)  # karena label mulai dari 1, dikurangi
+
+```
+
+Karena masalah klasifikasi bersifat multi-kelas, label target perlu diubah ke dalam format one-hot encoding. Label awal pada kolom `fetal_health` memiliki nilai 1, 2, dan 3, sehingga dikurangi 1 agar indeks dimulai dari 0. Fungsi `to_categorical` mengubah label integer menjadi vektor biner berdimensi tiga.
 
 ## 6. Data Splitting
 Membagi dataset menjadi training dan testing set untuk evaluasi model.
@@ -242,29 +252,6 @@ X_train, X_test, y_train, y_test = train_test_split(
 ```
 
 Pembagian dataset dilakukan dengan rasio 80:20 (80% untuk training, 20% untuk testing). Parameter `stratify=y` digunakan agar proporsi masing-masing kelas tetap terjaga secara seimbang pada kedua subset data. Parameter `random_state=42` memastikan pembagian yang konsisten dan dapat direproduksi.
-
-## 5. Data Transformation
-Menerapkan transformasi yang diperlukan pada data untuk mempersiapkannya untuk modeling.
-
-### Feature Scaling dengan StandardScaler
-```python
-# Normalisasi fitur
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
-
-```
-
-Normalisasi dilakukan menggunakan StandardScaler untuk menyetarakan skala setiap fitur numerik agar memiliki rata-rata 0 dan standar deviasi 1. Hal ini penting karena fitur yang memiliki skala berbeda dapat mendominasi proses pelatihan dan menyebabkan model belajar secara tidak seimbang.
-
-### Target Encoding untuk Neural Network
-```python
-# One-hot encode label (untuk klasifikasi multi-kelas)
-y_encoded = to_categorical(y - 1)  # karena label mulai dari 1, dikurangi
-
-```
-
-Karena masalah klasifikasi bersifat multi-kelas, label target perlu diubah ke dalam format one-hot encoding. Label awal pada kolom `fetal_health` memiliki nilai 1, 2, dan 3, sehingga dikurangi 1 agar indeks dimulai dari 0. Fungsi `to_categorical` mengubah label integer menjadi vektor biner berdimensi tiga.
-
 ## Summary
 Data preparation telah selesai dilakukan dengan tahapan sebagai berikut:
 
@@ -283,8 +270,6 @@ Data preparation telah selesai dilakukan dengan tahapan sebagai berikut:
    - **Target Encoding**: One-hot encoding untuk target menjadi format yang sesuai dengan neural network
 
 6. **Data Splitting**: Pembagian data menjadi training (80%) dan testing (20%) dengan stratified sampling untuk menjaga proporsi kelas
-
-7. **Final Validation**: Verifikasi bentuk data, kualitas, dan distribusi kelas
 
 **Data Final yang Siap untuk Modeling:**
 - **Training Data**: `X_train` (fitur scaled), `y_train` (one-hot encoded)
@@ -597,7 +582,7 @@ Confusion Matrix:
 ## Kelebihan Model
 
 ### 1. **Akurasi Tinggi**
-- Akurasi 93% sangat baik untuk aplikasi medis
+- Akurasi 91% sangat baik untuk aplikasi medis
 - Consistency antara training dan testing menunjukkan robustness
 
 ### 2. **Performa Excellent pada Kelas Normal**
@@ -829,7 +814,7 @@ Metrik yang digunakan untuk mengevaluasi model adalah:
    Berikut adalah classification report yang menunjukkan metrik evaluasi per kelas:
    ```
    precision    recall   f1-score   support
-   0 (Normal)        0.93      0.98      0.96       332
+   0 (Normal)        0.93      0.98      0.95       332
    1 (Suspect)       0.81      0.59      0.69        59
    2 (Pathological)  0.83      0.71      0.77        35
 
