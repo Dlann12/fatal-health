@@ -285,10 +285,7 @@ Data preparation telah selesai dilakukan dengan tahapan sebagai berikut:
 
 Pastikan untuk menyimpan objek scaler untuk digunakan pada data produksi atau prediksi baru di masa mendatang.
 
-## Modeling
-
-# Modelling
-
+# Modeling
 ## Pemilihan Model
 
 Untuk menyelesaikan permasalahan klasifikasi kesehatan janin, dipilih **Neural Network (Deep Learning)** menggunakan **Multi-Layer Perceptron (MLP)** dengan arsitektur **Sequential** dari TensorFlow Keras. Pemilihan model ini didasarkan pada beberapa pertimbangan:
